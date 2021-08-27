@@ -1,7 +1,7 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.service;
 
-import fon.njt.cvbuilderapi.model.User;
-import fon.njt.cvbuilderapi.repository.UserRepository;
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.User;
+import fon.njt.EvidencijaZavrsnihRadovaapi.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
