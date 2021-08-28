@@ -1,7 +1,7 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.service;
 
-import fon.njt.EvidencijaZavrsnihRadovaapi.entity.User;
-import fon.njt.EvidencijaZavrsnihRadovaapi.repository.UserRepository;
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.UserProfile;
+import fon.njt.EvidencijaZavrsnihRadovaapi.repository.UserProfileRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,13 +19,13 @@ import static java.util.Collections.singletonList;
 @Service
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        User user = userOptional
+        Optional<UserProfile> userOptional = userProfileRepository.findByUsername(username);
+        UserProfile user = userOptional
                 .orElseThrow(() -> new UsernameNotFoundException("No user " +
                         "Found with username : " + username));
 
