@@ -2,10 +2,7 @@ package fon.njt.EvidencijaZavrsnihRadovaapi.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 
@@ -13,6 +10,7 @@ import java.util.Date;
 @Entity
 public abstract class Person {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long personId;
     private String name;
     private String surname;
