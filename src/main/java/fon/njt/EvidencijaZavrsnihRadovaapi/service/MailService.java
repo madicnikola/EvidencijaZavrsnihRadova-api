@@ -1,7 +1,7 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.service;
 
-import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.MailServiceException;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.NotificationEmail;
+import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.MailServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,18 +17,20 @@ import java.util.Properties;
 @Slf4j
 public class MailService {
     private final String username;
+    private final String password;
     private final fon.njt.EvidencijaZavrsnihRadovaapi.service.MailContentBuilder mailContentBuilder;
 
+
     @Autowired
-    public MailService(@Value("${spring.mail.username}") String username, fon.njt.EvidencijaZavrsnihRadovaapi.service.MailContentBuilder mailContentBuilder) {
-    this.username = username;
-    this.mailContentBuilder = mailContentBuilder;
+    public MailService(@Value("${spring.mail.username}") String username, @Value("${spring.mail.password}") String password, MailContentBuilder mailContentBuilder) {
+        this.username = username;
+        this.password = password;
+        this.mailContentBuilder = mailContentBuilder;
     }
 
     @Async
     public void sendMail(NotificationEmail notificationEmail) {
         System.out.println(username);
-        final String password = "duleprojekat1203";
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", "587");

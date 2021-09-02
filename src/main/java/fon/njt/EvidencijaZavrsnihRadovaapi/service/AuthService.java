@@ -4,7 +4,10 @@ import fon.njt.EvidencijaZavrsnihRadovaapi.dto.AuthenticationResponse;
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.LoginRequest;
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.RefreshTokenRequest;
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.RegisterRequest;
-import fon.njt.EvidencijaZavrsnihRadovaapi.entity.*;
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.NotificationEmail;
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.Role;
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.UserProfile;
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.VerificationToken;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.AppException;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.UserNotFoundException;
 import fon.njt.EvidencijaZavrsnihRadovaapi.repository.UserProfileRepository;
@@ -43,7 +46,7 @@ public class AuthService {
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
-        user.setRole(new Role(1L,"USER"));
+        user.setRole(new Role(1L,"STUDENT"));
 
         user = userProfileRepository.save(user);
 
