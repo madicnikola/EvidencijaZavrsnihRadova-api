@@ -1,14 +1,17 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserProfile {
@@ -20,8 +23,20 @@ public class UserProfile {
     private String email;
     private String password;
     @ManyToOne
-    @JoinColumn(nullable=false)
+    @JoinColumn(nullable = false)
     private Role role;
     private boolean enabled;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        UserProfile that = (UserProfile) o;
+        return Objects.equals(userProfileId, that.userProfileId);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

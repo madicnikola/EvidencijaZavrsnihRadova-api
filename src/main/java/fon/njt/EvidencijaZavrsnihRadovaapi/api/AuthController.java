@@ -21,13 +21,11 @@ import static org.springframework.http.HttpStatus.OK;
 @AllArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("signup")
     public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
         authService.signup(registerRequest);
         return ResponseEntity.status(HttpStatus.OK).body("User Registration Successful");
-
     }
 
     @PostMapping("login")

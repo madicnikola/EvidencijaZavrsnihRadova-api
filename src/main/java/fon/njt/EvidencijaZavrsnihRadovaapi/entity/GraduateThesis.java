@@ -4,33 +4,38 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.util.Date;
 import java.util.Objects;
 
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "token")
-public class VerificationToken {
+public class GraduateThesis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String token;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @ToString.Exclude
-    private UserProfile userProfile;
-    private Instant expiryDate;
+    private Long graduateThesisId;
+    private String title;
+    private String faculty;
+    private String description;
+    private Date dateOfReception;
+    private Date dateOfBoardFormation;
+    private Date dateOfThesisDefence;
+    private ProgressStatus progressStatus;
+    private VisibilityStatus visibilityStatus;
+
+    @OneToOne
+    private Student student;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        VerificationToken that = (VerificationToken) o;
-        return Objects.equals(id, that.id);
+        GraduateThesis that = (GraduateThesis) o;
+        return Objects.equals(graduateThesisId, that.graduateThesisId);
     }
 
     @Override

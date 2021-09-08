@@ -1,15 +1,18 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.security;
 
+import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.AppException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
-
-import java.security.KeyStore;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.time.Instant;
 import java.util.Date;
 
@@ -23,13 +26,25 @@ public class JwtProvider {
 
     @Value("${jwt.expiration.time}")
     private Long jwtExpirationMillis;
+
     @Value("${jwt.secret}")
     private String secret;
+
+    @PostConstruct
+    public void init() {
+        try {
+            keyStore = KeyStore.getInstance("JKS");
+            InputStream resourceAsStream = getClass().getResourceAsStream("/springblog.jks");
+            keyStore.load(resourceAsStream, secret.toCharArray());
+        } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
+            throw new AppException("Exception occurred while loading keystore");
+        }
+    }
 
     public String generateToken(Authentication authentication) {
         User principal = (User) authentication.getPrincipal();
         return Jwts.builder().setSubject(principal.getUsername())
-                .signWith(getPrivateKey(),secret)
+                .signWith(getPrivateKey())
                 .setExpiration(Date.from(Instant.now().plusMillis(jwtExpirationMillis)))
                 .compact();
     }
@@ -38,13 +53,17 @@ public class JwtProvider {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(Date.from(Instant.now()))
-                .signWith(getPrivateKey(),secret)
+                .signWith(getPrivateKey())
                 .setExpiration(Date.from(Instant.now().plusMillis(jwtExpirationMillis)))
                 .compact();
     }
 
-    private SignatureAlgorithm getPrivateKey() {
-        return SignatureAlgorithm.HS512;
+    private PrivateKey getPrivateKey() {
+        try {
+            return (PrivateKey) keyStore.getKey("springblog", secret.toCharArray());
+        } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
+            throw new AppException("Exception occurred while retrieving private key from keystore");
+        }
     }
 
     public boolean validateToken(String jwt) {
@@ -52,8 +71,13 @@ public class JwtProvider {
         return true;
     }
 
-    private String getPublicKey() {
-       return secret;
+    private PublicKey getPublicKey() {
+        try {
+            return keyStore.getCertificate("springblog").getPublicKey();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+            throw new AppException("Exception occurred while retrieving private key from keystore");
+        }
     }
 
     public String getUsernameFromJwt(String token) {

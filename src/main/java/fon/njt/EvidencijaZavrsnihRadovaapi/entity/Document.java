@@ -1,13 +1,16 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 public class Document {
@@ -24,5 +27,18 @@ public class Document {
     private DocumentType documentType;
     @ManyToOne
     @JoinColumn
-    private FinalThesis finalThesis;
+    private GraduateThesis finalThesis;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Document document = (Document) o;
+        return Objects.equals(documentId, document.documentId);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

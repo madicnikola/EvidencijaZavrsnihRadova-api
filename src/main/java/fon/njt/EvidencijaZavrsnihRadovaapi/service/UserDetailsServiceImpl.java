@@ -5,6 +5,7 @@ import fon.njt.EvidencijaZavrsnihRadovaapi.repository.UserProfileRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,14 +26,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) {
         Optional<UserProfile> userOptional = userProfileRepository.findByUsername(username);
-        UserProfile user = userOptional
+        UserProfile userProfile = userOptional
                 .orElseThrow(() -> new UsernameNotFoundException("No user " +
                         "Found with username : " + username));
 
-        return new org.springframework.security
-                .core.userdetails.User(user.getUsername(), user.getPassword(),
-                user.isEnabled(), true, true,
-                true, getAuthorities("USER"));
+        return new User(userProfile.getUsername(), userProfile.getPassword(),
+                userProfile.isEnabled(), true, true,
+                true, getAuthorities(userProfile.getRole().getName()));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(String role) {

@@ -1,13 +1,17 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 
 
-@Data
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public abstract class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
