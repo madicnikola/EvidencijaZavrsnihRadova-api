@@ -4,14 +4,30 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-    private String username;
-    private String email;
-    private String password;
+    @NotNull
     private String name;
+    @NotNull
     private String surname;
+    @NotNull
+    private Date birthDate;
+    @NotNull
+    private String username;
+    @NotNull
+    private String email;
+    @NotNull
+    private String password;
     private String role;
+    private String index;
+    private String degreeOfStudy;
+    private String department;
+    private String rank;
+    private String title;
+
 }

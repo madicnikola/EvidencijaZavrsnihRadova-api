@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Entity
@@ -13,14 +14,16 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userProfileId;
+    @NotBlank(message = "Username is mandatory")
     private String username;
     @Email
+    @NotBlank(message = "Email is mandatory")
     private String email;
+    @NotBlank(message = "Password is mandatory")
     private String password;
     @ManyToOne
     @JoinColumn(nullable = false)

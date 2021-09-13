@@ -1,5 +1,6 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.repository;
 
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.Role;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

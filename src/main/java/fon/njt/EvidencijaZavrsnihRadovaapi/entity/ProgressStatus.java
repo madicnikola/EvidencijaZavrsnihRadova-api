@@ -1,6 +1,7 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.entity;
 
 public enum ProgressStatus {
+    INITIAL ,
     TITLE_NOT_DEFINED,
     IN_PROGRESS,
     THESIS_COMPLETED,

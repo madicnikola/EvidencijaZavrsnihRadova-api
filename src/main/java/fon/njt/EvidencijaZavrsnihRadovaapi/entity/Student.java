@@ -18,21 +18,9 @@ import java.util.Objects;
 public class Student extends Person {
     private String indexNumber;
     private String degreeOfStudy;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn()
     @ToString.Exclude
     private Department department;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Student student = (Student) o;
-        return Objects.equals(getPersonId(), student.getPersonId());
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
-    }
 }

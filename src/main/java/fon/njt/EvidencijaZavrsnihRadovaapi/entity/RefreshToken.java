@@ -17,7 +17,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
 public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

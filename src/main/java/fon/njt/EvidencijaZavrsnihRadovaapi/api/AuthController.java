@@ -23,7 +23,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("signup")
-    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<String> signupStudent(@RequestBody RegisterRequest registerRequest) {
         authService.signup(registerRequest);
         return ResponseEntity.status(HttpStatus.OK).body("User Registration Successful");
     }
