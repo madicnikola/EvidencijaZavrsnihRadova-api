@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -12,29 +13,32 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Document {
+public class Notification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long documentId;
-    private String name;
-    private String description;
-    private VisibilityStatus status;
-    private String fileLocation;
-    private String fileType;
+    @Setter(AccessLevel.NONE)
+    private Long notificationId;
+
+    private String topic;
+
+    private String message;
+
+    private Date createdAt;
+
+    private boolean isRead;
     @ManyToOne
-    @JoinColumn
-    private DocumentType documentType;
+    private UserProfile sender;
+
     @ManyToOne
-    @JoinColumn
-    private GraduateThesis finalThesis;
+    private UserProfile user;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Document document = (Document) o;
-        return Objects.equals(documentId, document.documentId);
+        Notification that = (Notification) o;
+        return Objects.equals(notificationId, that.notificationId);
     }
 
     @Override

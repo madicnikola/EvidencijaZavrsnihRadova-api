@@ -9,6 +9,6 @@ import org.mapstruct.Mapper;
 public interface ThesisMapper {
 
 
-    GraduateThesis thesisDtoToThesis(ThesisDto thesisDto);
+    GraduateThesis map(ThesisDto thesisDto);
 
 }

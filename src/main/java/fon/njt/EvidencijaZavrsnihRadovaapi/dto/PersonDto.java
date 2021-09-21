@@ -1,14 +1,11 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.dto;
 
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.UserProfile;
+import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
+@Data
 public abstract class PersonDto {
     private Long personId;
     private String name;

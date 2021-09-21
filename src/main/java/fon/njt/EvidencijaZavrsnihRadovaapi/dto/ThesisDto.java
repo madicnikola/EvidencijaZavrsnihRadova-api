@@ -18,7 +18,6 @@ public class ThesisDto {
     private Date dateOfThesisDefence;
     private ProgressStatus progressStatus;
     private VisibilityStatus visibilityStatus;
-
     private Student student;
 
 }

@@ -1,13 +1,14 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.mapper;
 
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.ProfessorDto;
+import fon.njt.EvidencijaZavrsnihRadovaapi.dto.StudentDto;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.Professor;
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.Student;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface ProfessorMapper {
-    Professor map(ProfessorDto profDto);
+public interface StudentMapper {
+    Student map(StudentDto data);
 
-    ProfessorDto map(Professor prof);
-
+    StudentDto map(Student data);
 }

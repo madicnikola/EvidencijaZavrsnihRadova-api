@@ -1,11 +1,14 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import fon.njt.EvidencijaZavrsnihRadovaapi.dto.PersonDto;
+import fon.njt.EvidencijaZavrsnihRadovaapi.mapper.helper.EntityMapper;
+import fon.njt.EvidencijaZavrsnihRadovaapi.mapper.helper.MappableEntity;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -21,6 +24,9 @@ public class Professor extends Person{
     @ManyToOne
     @JoinColumn
     private Title title;
+
+    @OneToMany(mappedBy = "professor", fetch = FetchType.LAZY)
+    private List<BoardFunction> boardFunctionsList;
 
     @Override
     public boolean equals(Object o) {

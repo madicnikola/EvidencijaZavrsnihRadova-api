@@ -91,6 +91,11 @@ public class AuthService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with name - " + principal.getUsername()));
     }
 
+    public String getCurrentUserUsername() {
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal.getUsername();
+    }
+
     public boolean isLoggedIn() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();

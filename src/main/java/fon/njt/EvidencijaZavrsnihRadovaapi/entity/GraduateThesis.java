@@ -1,11 +1,15 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import javafx.scene.input.KeyCode;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @Setter
@@ -25,6 +29,9 @@ public class GraduateThesis {
     private Date dateOfThesisDefence;
     private ProgressStatus progressStatus;
     private VisibilityStatus visibilityStatus;
+
+    @OneToOne
+    private Board board;
 
     @OneToOne
     private Student student;
