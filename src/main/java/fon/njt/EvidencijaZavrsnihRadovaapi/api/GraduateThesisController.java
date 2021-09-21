@@ -1,5 +1,6 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.api;
 
+import fon.njt.EvidencijaZavrsnihRadovaapi.dto.GraduateThesisDto;
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.MessageDto;
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.ThesisDto;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.GraduateThesis;
@@ -31,14 +32,19 @@ public class GraduateThesisController {
     }
 
     @PostMapping
-    public ResponseEntity saveThesis(@RequestBody ThesisDto thesisDto) {
+    public ResponseEntity saveThesis(@RequestBody GraduateThesisDto thesisDto) {
         graduateThesisService.save(thesisDto);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/my-thesis")
     public ResponseEntity<GraduateThesis> getMyThesis() {
         return ResponseEntity.status(HttpStatus.OK).body(graduateThesisService.getMyThesis());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GraduateThesis> getMyThesisByStudentId(@PathVariable String id) {
+        return ResponseEntity.status(HttpStatus.OK).body(graduateThesisService.getThesis(id));
     }
 
     @PostMapping("/request-title")

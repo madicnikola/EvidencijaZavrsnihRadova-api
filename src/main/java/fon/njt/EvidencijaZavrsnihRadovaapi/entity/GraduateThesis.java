@@ -17,6 +17,7 @@ import static javax.persistence.FetchType.LAZY;
 @RequiredArgsConstructor
 @Entity
 @AllArgsConstructor
+@Builder
 public class GraduateThesis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,9 +1,6 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.service;
 
-import fon.njt.EvidencijaZavrsnihRadovaapi.dto.AuthenticationResponse;
-import fon.njt.EvidencijaZavrsnihRadovaapi.dto.LoginRequest;
-import fon.njt.EvidencijaZavrsnihRadovaapi.dto.RefreshTokenRequest;
-import fon.njt.EvidencijaZavrsnihRadovaapi.dto.RegisterRequest;
+import fon.njt.EvidencijaZavrsnihRadovaapi.dto.*;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.*;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.AppException;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.UserNotFoundException;
@@ -41,6 +38,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final ProfessorRepository professorRepository;
     private final StudentRepository studentRepository;
+    private final GraduateThesisRepository thesisRepository;
 
     private String generateVerificationToken(UserProfile user) {
         String token = UUID.randomUUID().toString();
@@ -117,34 +115,10 @@ public class AuthService {
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
-
         if (registerRequest.getIndex() != null) {
-            Student s = new Student();
-            s.setName(registerRequest.getName());
-            s.setSurname(registerRequest.getSurname());
-            s.setBirthDate(registerRequest.getBirthDate());
-
-            s.setDegreeOfStudy(registerRequest.getDegreeOfStudy());
-            s.setDepartment(departmentRepository.getByName(registerRequest.getDepartment()));
-            s.setIndexNumber(registerRequest.getIndex());
-
-            s.setUserProfile(user);
-            user.setRole(roleRepository.findByName("STUDENT").get());
-            userProfileRepository.save(user);
-            studentRepository.save(s);
+            registerStudent(registerRequest, user);
         } else {
-            Professor p = new Professor();
-            p.setName(registerRequest.getName());
-            p.setSurname(registerRequest.getSurname());
-            p.setBirthDate(registerRequest.getBirthDate());
-
-            p.setAcademicRank(academicRankRepository.getByName(registerRequest.getRank()));
-            p.setTitle(titleRepository.getByName(registerRequest.getTitle()));
-
-            p.setUserProfile(user);
-            user.setRole(roleRepository.findByName("PROFESSOR").get());
-            userProfileRepository.save(user);
-            professorRepository.save(p);
+            registerProfessor(registerRequest, user);
         }
 
         String token = generateVerificationToken(user);
@@ -152,4 +126,42 @@ public class AuthService {
         mailService.sendMail(new NotificationEmail("Please activate your account",
                 user.getEmail(), "http://localhost:8080/auth/accountVerification/" + token));
     }
+
+    private void registerProfessor(RegisterRequest registerRequest, UserProfile user) {
+        Professor p = new Professor();
+        p.setName(registerRequest.getName());
+        p.setSurname(registerRequest.getSurname());
+        p.setBirthDate(registerRequest.getBirthDate());
+
+        p.setAcademicRank(academicRankRepository.getByName(registerRequest.getRank()));
+        p.setTitle(titleRepository.getByName(registerRequest.getTitle()));
+
+        p.setUserProfile(user);
+        user.setRole(roleRepository.findByName("PROFESSOR").get());
+        userProfileRepository.save(user);
+        professorRepository.save(p);
+    }
+
+    private void registerStudent(RegisterRequest registerRequest, UserProfile user) {
+        Student s = new Student();
+        s.setName(registerRequest.getName());
+        s.setSurname(registerRequest.getSurname());
+        s.setBirthDate(registerRequest.getBirthDate());
+
+        s.setDegreeOfStudy(registerRequest.getDegreeOfStudy());
+        s.setDepartment(departmentRepository.getByName(registerRequest.getDepartment()));
+        s.setIndexNumber(registerRequest.getIndex());
+
+        s.setUserProfile(user);
+        user.setRole(roleRepository.findByName("STUDENT").get());
+        userProfileRepository.save(user);
+        s = studentRepository.save(s);
+        GraduateThesis thesis = GraduateThesis.builder().student(s)
+                .faculty("Fakultet Organizacionih Nauka")
+                .progressStatus(ProgressStatus.INITIAL)
+                .visibilityStatus(VisibilityStatus.PRIVATE)
+                .build();
+        thesis = thesisRepository.save(thesis);
+    }
+
 }

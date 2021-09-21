@@ -11,8 +11,10 @@ import java.util.Optional;
 @Repository
 public interface GraduateThesisRepository extends JpaRepository<GraduateThesis, Long> {
 
-    @Query("select g from GraduateThesis g where g.visibilityStatus = ?1")
     Optional<List<GraduateThesis>> findAllByVisibilityStatus(VisibilityStatus status);
 
     Optional<GraduateThesis> findByStudentUserProfileUsername(String username);
+
+    Optional<GraduateThesis> findByStudentPersonId(Long id);
+
 }

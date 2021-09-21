@@ -1,12 +1,13 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.service;
 
+import fon.njt.EvidencijaZavrsnihRadovaapi.dto.GraduateThesisDto;
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.ThesisDto;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.*;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.key.BoardFunctionKey;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.BadRequestBodyException;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.NotPresentException;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.NotificationException;
-import fon.njt.EvidencijaZavrsnihRadovaapi.mapper.ThesisMapper;
+import fon.njt.EvidencijaZavrsnihRadovaapi.mapper.GraduateThesisMapper;
 import fon.njt.EvidencijaZavrsnihRadovaapi.repository.BoardFunctionRepository;
 import fon.njt.EvidencijaZavrsnihRadovaapi.repository.BoardRepository;
 import fon.njt.EvidencijaZavrsnihRadovaapi.repository.GraduateThesisRepository;
@@ -29,7 +30,7 @@ public class GraduateThesisService {
     private final BoardFunctionRepository boardFunctionRepository;
     private final StudentService studentService;
     private final ProfessorService professorService;
-    private final ThesisMapper thesisMapper;
+    private final GraduateThesisMapper thesisMapper;
     private final AuthService authService;
 
 
@@ -41,7 +42,7 @@ public class GraduateThesisService {
         return graduateThesisRepository.findAll();
     }
 
-    public void save(ThesisDto thesisDto) {
+    public void save(GraduateThesisDto thesisDto) {
         graduateThesisRepository.save(thesisMapper.map(thesisDto));
     }
 
@@ -123,5 +124,14 @@ public class GraduateThesisService {
         n.setTopic("Tema");
         n.setCreatedAt(new Date());
         notificationRepository.save(n);
+    }
+
+    public GraduateThesis getThesis(String studentId) {
+        Optional<GraduateThesis> thesis = graduateThesisRepository.findByStudentPersonId(Long.parseLong(studentId));
+        if (!thesis.isPresent()) {
+            throw new NotPresentException("thesis not found");
+        }
+        return thesis.get();
+
     }
 }
