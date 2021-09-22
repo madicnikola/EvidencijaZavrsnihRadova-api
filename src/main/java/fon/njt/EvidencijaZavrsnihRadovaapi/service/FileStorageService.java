@@ -73,6 +73,10 @@ public class FileStorageService {
         }
     }
 
+    public boolean delete(String folderName, String filename) {
+       return FileSystemUtils.deleteRecursively(root.resolve(folderName).resolve(filename).toFile());
+    }
+
 
     public Path createDirectory(Path path) {
         try {

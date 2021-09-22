@@ -59,5 +59,17 @@ public class DocumentController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
+
+    @DeleteMapping("/files/{folderName}/{filename:.+}")
+    public ResponseEntity<MessageDto> deleteFile(@PathVariable String folderName, @PathVariable String filename) {
+        boolean deleted = storageService.delete(folderName, filename);
+        if (deleted) {
+            return ResponseEntity.ok().body(MessageDto.builder().message("File deleted successfully: " + filename + "!").build());
+        } else
+            return ResponseEntity.ok().body(MessageDto.builder().message("System could not  delete the file: " + filename + "!").build());
+
+    }
+
+
 }
 
