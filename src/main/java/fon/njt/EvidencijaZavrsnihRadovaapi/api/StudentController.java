@@ -39,4 +39,24 @@ public class StudentController {
     }
 
 
+    @GetMapping("/board/{username}")
+    public ResponseEntity<List<StudentDto>> getStudentsByBoardMemberUsername(@PathVariable("username") String boardMemberUsername) {
+        List<StudentDto> students = studentService.getStudentsByBoardMember(boardMemberUsername);
+        return ResponseEntity.status(HttpStatus.OK).body(students);
+    }
+
+    @GetMapping("/mentor/{username}")
+    public ResponseEntity<List<StudentDto>> getStudentsByMentorUsername(@PathVariable("username") String mentorUsername) {
+        List<StudentDto> students = studentService.getStudentsByMentorUsername(mentorUsername);
+        return ResponseEntity.status(HttpStatus.OK).body(students);
+    }
+
+
+    @GetMapping("/all")
+    public ResponseEntity<List<StudentDto>> getAllStudents() {
+        List<StudentDto> students = studentService.getAllStudents();
+        return ResponseEntity.status(HttpStatus.OK).body(students);
+    }
+
+
 }

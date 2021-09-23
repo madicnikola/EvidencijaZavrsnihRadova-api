@@ -126,12 +126,20 @@ public class GraduateThesisService {
         notificationRepository.save(n);
     }
 
-    public GraduateThesis getThesis(String studentId) {
-        Optional<GraduateThesis> thesis = graduateThesisRepository.findByStudentPersonId(Long.parseLong(studentId));
+    public GraduateThesis getThesis(Long studentId) {
+        Optional<GraduateThesis> thesis = graduateThesisRepository.findByStudentPersonId(studentId);
         if (!thesis.isPresent()) {
             throw new NotPresentException("thesis not found");
         }
         return thesis.get();
 
+    }
+
+    public GraduateThesis getThesisByBoardId(Long boardId) {
+        Optional<GraduateThesis> thesis = graduateThesisRepository.findByBoardBoardId(boardId);
+        if (!thesis.isPresent()) {
+            throw new NotPresentException("theses not found");
+        }
+        return thesis.get();
     }
 }

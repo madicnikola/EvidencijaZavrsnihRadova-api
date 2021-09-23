@@ -14,6 +14,8 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 public class DocumentType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

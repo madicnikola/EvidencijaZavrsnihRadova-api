@@ -2,5 +2,6 @@ package fon.njt.EvidencijaZavrsnihRadovaapi.entity;
 
 public enum VisibilityStatus {
     PRIVATE,
-    PUBLISHED
+    BOARD_VIEW,
+    PUBLISHED,
 }

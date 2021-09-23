@@ -17,4 +17,6 @@ public interface GraduateThesisRepository extends JpaRepository<GraduateThesis, 
 
     Optional<GraduateThesis> findByStudentPersonId(Long id);
 
+    Optional<GraduateThesis> findByBoardBoardId(Long boardId);
+
 }

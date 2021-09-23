@@ -133,7 +133,7 @@ public class AuthService {
         p.setSurname(registerRequest.getSurname());
         p.setBirthDate(registerRequest.getBirthDate());
 
-        p.setAcademicRank(academicRankRepository.getByName(registerRequest.getRank()));
+        p.setAcademicRank(academicRankRepository.getByName(registerRequest.getAcademicRank()));
         p.setTitle(titleRepository.getByName(registerRequest.getTitle()));
 
         p.setUserProfile(user);

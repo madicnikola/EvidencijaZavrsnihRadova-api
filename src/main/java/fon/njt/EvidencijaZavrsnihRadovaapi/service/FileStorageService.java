@@ -1,5 +1,6 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.service;
 
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.Document;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.Student;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
+import java.beans.Transient;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -18,6 +21,7 @@ import java.util.stream.Stream;
 @Service
 @AllArgsConstructor
 public class FileStorageService {
+    private final AuthService authService;
     private final GraduateThesisService thesisService;
     private final StudentService studentService;
     private final Path root = Paths.get("uploads");
@@ -30,10 +34,8 @@ public class FileStorageService {
         }
     }
 
-    public void save(MultipartFile file) {
-//        String thesisName = thesisService.getMyThesis().getTitle();
-        String folderName = getFolderName();
-        Path path = root.resolve(folderName);
+    public void save(MultipartFile file, String folder) {
+        Path path = root.resolve(folder);
         if (!Files.exists(path))
             createDirectory(path);
         try {
@@ -73,6 +75,7 @@ public class FileStorageService {
         }
     }
 
+    @Transactional
     public boolean delete(String folderName, String filename) {
        return FileSystemUtils.deleteRecursively(root.resolve(folderName).resolve(filename).toFile());
     }
@@ -87,11 +90,5 @@ public class FileStorageService {
         return path;
     }
 
-    private String getFolderName() {
-        String folderName = studentService.getCurrent().getIndexNumber();
-        String[] indexNum = folderName.split("/");
-        folderName = indexNum[0] + indexNum[1];
-        System.out.println(folderName);
-        return folderName;
-    }
+
 }

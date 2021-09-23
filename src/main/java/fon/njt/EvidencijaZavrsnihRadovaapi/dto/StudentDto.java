@@ -8,4 +8,5 @@ public class StudentDto extends PersonDto {
     private String indexNumber;
     private String degreeOfStudy;
     private Department department;
+    private ProfessorDto mentor;
 }

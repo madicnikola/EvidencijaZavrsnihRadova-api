@@ -27,7 +27,7 @@ public class RegisterRequest {
     private String index;
     private String degreeOfStudy;
     private String department;
-    private String rank;
+    private String academicRank;
     private String title;
 
 }

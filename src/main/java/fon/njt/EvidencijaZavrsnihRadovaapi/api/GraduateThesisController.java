@@ -44,7 +44,7 @@ public class GraduateThesisController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GraduateThesis> getMyThesisByStudentId(@PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(graduateThesisService.getThesis(id));
+        return ResponseEntity.status(HttpStatus.OK).body(graduateThesisService.getThesis(Long.parseLong(id)));
     }
 
     @PostMapping("/request-title")
