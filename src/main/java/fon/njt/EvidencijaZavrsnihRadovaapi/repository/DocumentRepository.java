@@ -13,4 +13,6 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
 
     Optional<List<Document>> findByFileLocation(String folderName);
 
+    Optional<List<Document>> findByFinalThesisGraduateThesisId(Long id);
+
 }

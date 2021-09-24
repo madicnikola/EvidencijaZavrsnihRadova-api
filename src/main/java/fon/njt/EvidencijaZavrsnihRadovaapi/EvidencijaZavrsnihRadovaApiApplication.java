@@ -9,18 +9,18 @@ import javax.annotation.Resource;
 
 @SpringBootApplication
 public class EvidencijaZavrsnihRadovaApiApplication implements CommandLineRunner {
-	@Resource
-	FileStorageService storageService;
+    @Resource
+    FileStorageService storageService;
 
-	public static void main(String[] args) {
-		SpringApplication.run(EvidencijaZavrsnihRadovaApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(EvidencijaZavrsnihRadovaApiApplication.class, args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
+    @Override
+    public void run(String... args) throws Exception {
 //		storageService.deleteAll();
 //		storageService.init();
-	}
+    }
 
 
 }

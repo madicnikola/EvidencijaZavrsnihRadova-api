@@ -1,37 +1,38 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.service;
 
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.GraduateThesisDto;
-import fon.njt.EvidencijaZavrsnihRadovaapi.dto.ThesisDto;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.*;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.key.BoardFunctionKey;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.BadRequestBodyException;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.NotPresentException;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.NotificationException;
 import fon.njt.EvidencijaZavrsnihRadovaapi.mapper.GraduateThesisMapper;
-import fon.njt.EvidencijaZavrsnihRadovaapi.repository.BoardFunctionRepository;
-import fon.njt.EvidencijaZavrsnihRadovaapi.repository.BoardRepository;
-import fon.njt.EvidencijaZavrsnihRadovaapi.repository.GraduateThesisRepository;
-import fon.njt.EvidencijaZavrsnihRadovaapi.repository.NotificationRepository;
+import fon.njt.EvidencijaZavrsnihRadovaapi.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class GraduateThesisService {
     private final GraduateThesisRepository graduateThesisRepository;
     private final NotificationRepository notificationRepository;
     private final BoardRepository boardRepository;
     private final BoardFunctionRepository boardFunctionRepository;
+    private final DocumentRepository documentRepository;
     private final StudentService studentService;
     private final ProfessorService professorService;
     private final GraduateThesisMapper thesisMapper;
     private final AuthService authService;
+    private final GraduateThesisMapper mapper;
 
 
     public List<GraduateThesis> getAllPublished() {
@@ -141,5 +142,50 @@ public class GraduateThesisService {
             throw new NotPresentException("theses not found");
         }
         return thesis.get();
+    }
+
+
+    public GraduateThesis updateThesis(GraduateThesisDto dto) {
+        GraduateThesis graduateThesis = graduateThesisRepository.findById(dto.getGraduateThesisId()).orElse(null);
+        graduateThesis = mapper.updateThesisFromDto(dto, graduateThesis);
+        graduateThesisRepository.save(graduateThesis);
+        return graduateThesis;
+    }
+
+
+    public GraduateThesis updateThesis(GraduateThesisDto dto, Long id) {
+        GraduateThesis graduateThesis = graduateThesisRepository.findById(id).orElse(null);
+        graduateThesis = mapper.updateThesisFromDto(dto, graduateThesis);
+        graduateThesisRepository.save(graduateThesis);
+        return graduateThesis;
+    }
+
+    public GraduateThesis publish(GraduateThesisDto thesisDto) {
+        GraduateThesis thesis = updateThesis(thesisDto, thesisDto.getGraduateThesisId());
+        Optional<List<Document>> documents = documentRepository.findByFinalThesisGraduateThesisId(thesis.getGraduateThesisId());
+        if (!documents.isPresent()) {
+            throw new NotPresentException("documents not found");
+        }
+        List<Document> docs = documents.get();
+        docs.stream().forEach(document -> {
+            document.setStatus(VisibilityStatus.PUBLISHED);
+            documentRepository.save(document);
+        });
+        return thesis;
+    }
+    public GraduateThesis unpublish(GraduateThesisDto thesisDto) {
+        GraduateThesis thesis = updateThesis(thesisDto, thesisDto.getGraduateThesisId());
+        Optional<List<Document>> documents = documentRepository.findByFinalThesisGraduateThesisId(thesis.getGraduateThesisId());
+        if (!documents.isPresent()) {
+            throw new NotPresentException("documents not found");
+        }
+        List<Document> docs = documents.get();
+        docs.stream().map(document -> {
+            document.setStatus(VisibilityStatus.PRIVATE);
+            documentRepository.save(document);
+            return document;
+        }).collect(Collectors.toList());
+
+        return thesis;
     }
 }
