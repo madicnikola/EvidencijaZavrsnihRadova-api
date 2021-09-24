@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -160,6 +161,10 @@ public class AuthService {
                 .faculty("Fakultet Organizacionih Nauka")
                 .progressStatus(ProgressStatus.INITIAL)
                 .visibilityStatus(VisibilityStatus.PRIVATE)
+                .dateOfThesisDefence(new Date(Short.MIN_VALUE))
+                .dateOfReception(new Date(Short.MIN_VALUE))
+                .dateOfBoardFormation(new Date(Short.MIN_VALUE))
+                .dateOfThesisSubmission(new Date(Short.MIN_VALUE))
                 .build();
         thesis = thesisRepository.save(thesis);
     }

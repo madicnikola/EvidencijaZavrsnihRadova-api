@@ -28,6 +28,7 @@ public class GraduateThesis {
     private Date dateOfReception;
     private Date dateOfBoardFormation;
     private Date dateOfThesisDefence;
+    private Date dateOfThesisSubmission;
     private ProgressStatus progressStatus;
     private VisibilityStatus visibilityStatus;
 

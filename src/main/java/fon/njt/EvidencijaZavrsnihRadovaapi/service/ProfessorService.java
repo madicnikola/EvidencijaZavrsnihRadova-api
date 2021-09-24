@@ -1,22 +1,26 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.service;
 
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.ProfessorDto;
-import fon.njt.EvidencijaZavrsnihRadovaapi.entity.GraduateThesis;
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.BoardFunction;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.Professor;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.NotPresentException;
 import fon.njt.EvidencijaZavrsnihRadovaapi.mapper.ProfessorMapper;
+import fon.njt.EvidencijaZavrsnihRadovaapi.repository.BoardFunctionRepository;
 import fon.njt.EvidencijaZavrsnihRadovaapi.repository.ProfessorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ProfessorService {
     private final ProfessorRepository professorRepository;
-    private final ProfessorMapper professorMapper;
+    private final ProfessorMapper mapper;
+    private final BoardFunctionRepository boardFunctionRepository;
 
     public List<Professor> getAll() {
         return professorRepository.findAll();
@@ -43,6 +47,16 @@ public class ProfessorService {
         if (!p.isPresent()) {
             throw new NotPresentException("Professor not found");
         }
-        return professorMapper.map(p.get());
+        return mapper.map(p.get());
+    }
+
+    public List<ProfessorDto> getByBoardFunction(Long id) {
+        List<Professor> professors = new LinkedList<>();
+        List<BoardFunction> boardFunctions = boardFunctionRepository.findByBoardGraduateThesisGraduateThesisId(id).orElse(null);
+        boardFunctions.forEach(boardFunction -> {
+            List<Professor> prof = professorRepository.findByBoardFunctionsListNotContaining(boardFunction);
+            prof.forEach(professors::add);
+        });
+        return professors.stream().map(mapper::map).collect(Collectors.toList());
     }
 }

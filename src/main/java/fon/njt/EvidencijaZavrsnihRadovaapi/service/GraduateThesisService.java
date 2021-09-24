@@ -10,8 +10,10 @@ import fon.njt.EvidencijaZavrsnihRadovaapi.mapper.GraduateThesisMapper;
 import fon.njt.EvidencijaZavrsnihRadovaapi.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.context.Theme;
 
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class GraduateThesisService {
     private final GraduateThesisRepository graduateThesisRepository;
     private final NotificationRepository notificationRepository;
+    private final StudentRepository studentRepository;
     private final BoardRepository boardRepository;
     private final BoardFunctionRepository boardFunctionRepository;
     private final DocumentRepository documentRepository;
@@ -74,7 +77,7 @@ public class GraduateThesisService {
         n = notificationRepository.save(n);
     }
 
-    public void setTitle(Map<String, Object> map) {
+    public GraduateThesis setTitle(Map<String, Object> map) {
         try {
             String studentUsername = (String) map.get("username");
             String title = (String) map.get("title");
@@ -89,8 +92,11 @@ public class GraduateThesisService {
             if (thesis.getBoard() == null) {
                 thesis.setBoard(makeBoard(thesis));
             }
-            graduateThesisRepository.save(thesis);
+            Professor professor = professorService.findByUsername(authService.getCurrentUserUsername());
+            thesis.getStudent().setMentor(professor);
+            thesis = graduateThesisRepository.save(thesis);
             notify(studentUsername);
+            return thesis;
         } catch (Exception e) {
             e.printStackTrace();
             throw new BadRequestBodyException("Error retrieving notification or/and title data");
@@ -127,7 +133,7 @@ public class GraduateThesisService {
         notificationRepository.save(n);
     }
 
-    public GraduateThesis getThesis(Long studentId) {
+    public GraduateThesis getThesisByStudentId(Long studentId) {
         Optional<GraduateThesis> thesis = graduateThesisRepository.findByStudentPersonId(studentId);
         if (!thesis.isPresent()) {
             throw new NotPresentException("thesis not found");
@@ -173,6 +179,7 @@ public class GraduateThesisService {
         });
         return thesis;
     }
+
     public GraduateThesis unpublish(GraduateThesisDto thesisDto) {
         GraduateThesis thesis = updateThesis(thesisDto, thesisDto.getGraduateThesisId());
         Optional<List<Document>> documents = documentRepository.findByFinalThesisGraduateThesisId(thesis.getGraduateThesisId());
@@ -187,5 +194,32 @@ public class GraduateThesisService {
         }).collect(Collectors.toList());
 
         return thesis;
+    }
+
+    public List<GraduateThesisDto> getThesesByYear(int year) {
+        try {
+            String startDateString = (year - 1) + "-10-01";
+            String endDateString = (year) + "-10-01";
+            Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateString);
+            Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDateString);
+            List<GraduateThesis> graduateTheses = graduateThesisRepository.findByDateOfReceptionBetween(startDate, endDate).orElse(null);
+            graduateTheses.forEach(System.out::println);
+            return graduateTheses.stream().map(mapper::map).collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Greska prilikom ucitavanja zavrsnih radova po datumu");
+        }
+    }
+
+    public GraduateThesisDto getThesis(Long id) {
+        return mapper.map(graduateThesisRepository.findById(id).orElse(null));
+    }
+
+    public GraduateThesis getThesisByStudentUsername(String studentUsername) {
+        Optional<GraduateThesis> thesis = graduateThesisRepository.findByStudentUserProfileUsername(studentUsername);
+        if (!thesis.isPresent()) {
+            throw new NotPresentException("thesis not found");
+        }
+        return thesis.get();
     }
 }

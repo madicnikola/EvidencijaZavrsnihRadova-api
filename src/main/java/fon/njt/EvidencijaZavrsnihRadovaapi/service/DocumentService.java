@@ -40,7 +40,7 @@ public class DocumentService {
                 .name(file.getOriginalFilename())
                 .status(VisibilityStatus.PRIVATE)
                 .fileLocation(folderName)
-                .finalThesis(thesisService.getThesis(s.getPersonId()))
+                .finalThesis(thesisService.getThesisByStudentId(s.getPersonId()))
                 .documentType(documentTypeRepository.getByName(type))
                 .fileType(fileType)
                 .build();

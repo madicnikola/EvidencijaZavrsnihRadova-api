@@ -39,8 +39,23 @@ public class GraduateThesisController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GraduateThesis> getMyThesisByStudentId(@PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(graduateThesisService.getThesis(Long.parseLong(id)));
+    public ResponseEntity<GraduateThesisDto> getThesis(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(graduateThesisService.getThesis(id));
+    }
+
+    @GetMapping("/student/{id}")
+    public ResponseEntity<GraduateThesis> getMyThesisByStudentId(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(graduateThesisService.getThesisByStudentId(id));
+    }
+
+    @GetMapping("/student/user-profile/{username}")
+    public ResponseEntity<GraduateThesisDto> getMyThesisByStudentUsername(@PathVariable String username) {
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.map(graduateThesisService.getThesisByStudentUsername(username)));
+    }
+
+    @GetMapping("/filter/{year}")
+    public ResponseEntity<List<GraduateThesisDto>> getThesesByYear(@PathVariable int year) {
+        return ResponseEntity.status(HttpStatus.OK).body(graduateThesisService.getThesesByYear(year));
     }
 
     @PostMapping
@@ -56,9 +71,9 @@ public class GraduateThesisController {
     }
 
     @PostMapping("/set-title")
-    public ResponseEntity<MessageDto> setTitle(@RequestBody Map<String, Object> requestBody) {
-        graduateThesisService.setTitle(requestBody);
-        return ResponseEntity.status(HttpStatus.OK).body(MessageDto.builder().message("Naziv teme je uspešno postavljen!").build());
+    public ResponseEntity<GraduateThesisDto> setTitle(@RequestBody Map<String, Object> requestBody) {
+        GraduateThesis graduateThesis = graduateThesisService.setTitle(requestBody);
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.map(graduateThesis));
     }
 
     @PostMapping("/publish")
@@ -83,6 +98,4 @@ public class GraduateThesisController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 
     }
-
-
 }

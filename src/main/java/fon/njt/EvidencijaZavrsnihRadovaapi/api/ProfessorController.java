@@ -26,5 +26,13 @@ public class ProfessorController {
         return ResponseEntity.status(HttpStatus.OK).body(professorService.getById(id));
     }
 
+    @GetMapping("/board/thesis/{id}")
+    public ResponseEntity<List<ProfessorDto>> getByBoardFunction(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(professorService.getByBoardFunction(id));
+    }
+
+
+
+
 
 }

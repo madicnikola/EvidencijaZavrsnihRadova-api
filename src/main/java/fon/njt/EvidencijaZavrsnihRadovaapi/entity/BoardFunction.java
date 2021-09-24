@@ -1,8 +1,6 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.key.BoardFunctionKey;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -14,7 +12,6 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
