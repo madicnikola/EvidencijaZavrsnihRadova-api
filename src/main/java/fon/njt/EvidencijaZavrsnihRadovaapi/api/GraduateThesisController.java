@@ -2,8 +2,12 @@ package fon.njt.EvidencijaZavrsnihRadovaapi.api;
 
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.GraduateThesisDto;
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.MessageDto;
+import fon.njt.EvidencijaZavrsnihRadovaapi.dto.ProfessorDto;
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.BoardFunction;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.GraduateThesis;
+import fon.njt.EvidencijaZavrsnihRadovaapi.entity.Professor;
 import fon.njt.EvidencijaZavrsnihRadovaapi.mapper.GraduateThesisMapper;
+import fon.njt.EvidencijaZavrsnihRadovaapi.mapper.ProfessorMapper;
 import fon.njt.EvidencijaZavrsnihRadovaapi.service.GraduateThesisService;
 import fon.njt.EvidencijaZavrsnihRadovaapi.service.RequestService;
 import lombok.AllArgsConstructor;
@@ -20,6 +24,7 @@ import java.util.Map;
 public class GraduateThesisController {
     private final GraduateThesisService graduateThesisService;
     private final GraduateThesisMapper mapper;
+    private final ProfessorMapper professorMapper;
     private final RequestService requestService;
 
     @GetMapping("")
@@ -97,5 +102,14 @@ public class GraduateThesisController {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 
+    }
+
+    @PostMapping("/board/add")
+    public ResponseEntity<ProfessorDto> addBoardMember(@RequestParam Long boardId, @RequestParam Long professorId  ) {
+        Professor prof = graduateThesisService.addBoardMember(boardId, professorId);
+        if (prof != null)
+            return ResponseEntity.status(HttpStatus.OK).body(professorMapper.map(prof));
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
 }

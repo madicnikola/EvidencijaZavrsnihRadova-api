@@ -3,6 +3,7 @@ package fon.njt.EvidencijaZavrsnihRadovaapi.service;
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.*;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.*;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.AppException;
+import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.UserAlreadyExists;
 import fon.njt.EvidencijaZavrsnihRadovaapi.exceptions.UserNotFoundException;
 import fon.njt.EvidencijaZavrsnihRadovaapi.repository.*;
 import fon.njt.EvidencijaZavrsnihRadovaapi.security.JwtProvider;
@@ -116,6 +117,9 @@ public class AuthService {
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
+        if(userProfileRepository.findByUsername(user.getUsername()).isPresent()){
+            throw new UserAlreadyExists("Korisnik sa istim korisničkim imenom već postoji!");
+        }
         if (registerRequest.getIndex() != null) {
             registerStudent(registerRequest, user);
         } else {

@@ -13,5 +13,10 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
 
     Optional<Professor> findByUserProfileUsername(String username);
 
+
+    Optional<List<Professor>> findAllByPersonIdNotIn(Iterable<Long> professorId);
+
+    List<Professor> findAllByPersonIdIn(List<Long> ids);
+
     List<Professor> findByBoardFunctionsListNotContaining(BoardFunction boardFunction);
 }

@@ -51,12 +51,16 @@ public class ProfessorService {
     }
 
     public List<ProfessorDto> getByBoardFunction(Long id) {
-        List<Professor> professors = new LinkedList<>();
+        List<Professor> professors;
         List<BoardFunction> boardFunctions = boardFunctionRepository.findByBoardGraduateThesisGraduateThesisId(id).orElse(null);
-        boardFunctions.forEach(boardFunction -> {
-            List<Professor> prof = professorRepository.findByBoardFunctionsListNotContaining(boardFunction);
-            prof.forEach(professors::add);
-        });
+        List<Long> professorsAlreadyInBoardIds = boardFunctions.stream().map(boardFunction -> boardFunction.getProfessor().getPersonId()).collect(Collectors.toList());
+
+        professors = professorRepository.findAllByPersonIdNotIn(professorsAlreadyInBoardIds).orElse(null);
+
         return professors.stream().map(mapper::map).collect(Collectors.toList());
+    }
+
+    public List<Professor> getAllByIds(List<Long> ids) {
+        return professorRepository.findAllById(ids);
     }
 }

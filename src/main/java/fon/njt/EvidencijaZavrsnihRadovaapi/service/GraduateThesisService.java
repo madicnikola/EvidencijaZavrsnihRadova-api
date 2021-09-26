@@ -31,6 +31,7 @@ public class GraduateThesisService {
     private final BoardRepository boardRepository;
     private final BoardFunctionRepository boardFunctionRepository;
     private final DocumentRepository documentRepository;
+    private final ProfessorRepository professorRepository;
     private final StudentService studentService;
     private final ProfessorService professorService;
     private final GraduateThesisMapper thesisMapper;
@@ -91,6 +92,7 @@ public class GraduateThesisService {
             thesis.setProgressStatus(ProgressStatus.IN_PROGRESS);
             if (thesis.getBoard() == null) {
                 thesis.setBoard(makeBoard(thesis));
+                thesis.getBoard().setGraduateThesis(thesis);
             }
             Professor professor = professorService.findByUsername(authService.getCurrentUserUsername());
             thesis.getStudent().setMentor(professor);
@@ -221,5 +223,16 @@ public class GraduateThesisService {
             throw new NotPresentException("thesis not found");
         }
         return thesis.get();
+    }
+
+    public Professor addBoardMember(Long boardId, Long professorId) {
+        Professor professor = professorRepository.findById(professorId).orElse(null);
+        System.out.println(professor.getPersonId());
+        Board board = boardRepository.findById(boardId).orElse(null);
+        System.out.println("board id ------> " + board.getBoardId());
+        BoardFunction bf = BoardFunction.builder().boardFunctionId(new BoardFunctionKey(professorId, boardId)).function("BOARD_MEMBER").joinDate(new Date()).professor(professor).board(board).build();
+        System.out.println(bf);
+        boardFunctionRepository.save(bf);
+        return professor;
     }
 }
