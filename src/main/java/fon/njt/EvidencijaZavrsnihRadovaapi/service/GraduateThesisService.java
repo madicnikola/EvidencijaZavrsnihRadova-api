@@ -73,7 +73,7 @@ public class GraduateThesisService {
         n.setCreatedAt(new Date());
         n.setMessage("Student " + s.getName() + " " + s.getSurname() + " " + s.getIndexNumber() + " želi da dobije temu za diplomski rad");
         if (notificationRepository.findByUserAndSenderAndTopic(n.getUser(), n.getSender(), n.getTopic()).isPresent()) {
-            throw new NotificationException("Obavestenje je vec poslato!");
+            throw new NotificationException("Obavestenje je već poslato!");
         }
         n = notificationRepository.save(n);
     }
