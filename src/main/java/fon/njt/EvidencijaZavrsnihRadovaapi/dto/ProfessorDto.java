@@ -20,6 +20,7 @@ public class ProfessorDto extends PersonDto {
     private Title title;
 
     private List<BoardFunction> boardFunctionsList;
+    private String department;
 
     @Override
     public boolean equals(Object o) {

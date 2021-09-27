@@ -22,4 +22,5 @@ public class GraduateThesisDto {
     private VisibilityStatus visibilityStatus;
     private Board board;
     private Student student;
+    private Integer grade;
 }

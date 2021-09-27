@@ -24,6 +24,10 @@ public class Professor extends Person{
     @ManyToOne
     @JoinColumn
     private Title title;
+    private String department;
+    private String cabinet;
+    private String phone;
+
 
     @OneToMany(mappedBy = "professor", fetch = FetchType.LAZY)
     private List<BoardFunction> boardFunctionsList;

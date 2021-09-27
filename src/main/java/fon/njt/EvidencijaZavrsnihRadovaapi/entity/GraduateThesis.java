@@ -31,6 +31,7 @@ public class GraduateThesis {
     private Date dateOfThesisSubmission;
     private ProgressStatus progressStatus;
     private VisibilityStatus visibilityStatus;
+    private int grade;
 
     @OneToOne
     private Board board;

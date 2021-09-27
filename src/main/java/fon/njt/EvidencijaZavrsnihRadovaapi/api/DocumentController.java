@@ -1,20 +1,12 @@
 package fon.njt.EvidencijaZavrsnihRadovaapi.api;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import fon.njt.EvidencijaZavrsnihRadovaapi.dto.MessageDto;
 import fon.njt.EvidencijaZavrsnihRadovaapi.entity.Document;
-import fon.njt.EvidencijaZavrsnihRadovaapi.entity.UserProfile;
-import fon.njt.EvidencijaZavrsnihRadovaapi.entity.VisibilityStatus;
 import fon.njt.EvidencijaZavrsnihRadovaapi.service.AuthService;
 import fon.njt.EvidencijaZavrsnihRadovaapi.service.DocumentService;
 import fon.njt.EvidencijaZavrsnihRadovaapi.service.FileStorageService;
 import fon.njt.EvidencijaZavrsnihRadovaapi.service.GraduateThesisService;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,11 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import javax.mail.Message;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
 @RequestMapping("/doc")
+@CrossOrigin(origins = "http://localhost:4200")
 public class DocumentController {
     private final DocumentService documentService;
     private final AuthService authService;

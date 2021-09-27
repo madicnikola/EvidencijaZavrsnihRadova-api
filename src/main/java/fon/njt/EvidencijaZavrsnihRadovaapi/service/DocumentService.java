@@ -97,8 +97,9 @@ public class DocumentService {
                     break;
                 case BOARD_VIEW:
                 case PRIVATE:
-                    if (isAuthorized(d.getStatus(), d))
+                    if (authService.isLoggedIn() && isAuthorized(d.getStatus(), d)) {
                         docs.add(d);
+                    }
                     break;
                 default:
                     break;
