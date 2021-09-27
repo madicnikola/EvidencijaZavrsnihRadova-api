@@ -170,15 +170,15 @@ public class GraduateThesisService {
 
     public GraduateThesis publish(GraduateThesisDto thesisDto) {
         GraduateThesis thesis = updateThesis(thesisDto, thesisDto.getGraduateThesisId());
-        Optional<List<Document>> documents = documentRepository.findByFinalThesisGraduateThesisId(thesis.getGraduateThesisId());
-        if (!documents.isPresent()) {
-            throw new NotPresentException("documents not found");
-        }
-        List<Document> docs = documents.get();
-        docs.stream().forEach(document -> {
-            document.setStatus(VisibilityStatus.PUBLISHED);
-            documentRepository.save(document);
-        });
+//        Optional<List<Document>> documents = documentRepository.findByFinalThesisGraduateThesisId(thesis.getGraduateThesisId());
+//        if (!documents.isPresent()) {
+//            throw new NotPresentException("documents not found");
+//        }
+//        List<Document> docs = documents.get();
+//        docs.stream().forEach(document -> {
+//            document.setStatus(VisibilityStatus.PUBLISHED);
+//            documentRepository.save(document);
+//        });
         return thesis;
     }
 
